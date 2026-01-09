@@ -5,6 +5,6 @@ namespace MroLite.Api.DTOs
     public class UpdateStatusDto
     {
         [Required]
-        public string Status { get; set; } = null!;
+        public MaintenanceJobStatus? Status { get; set; }
     }
 }

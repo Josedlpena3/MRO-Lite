@@ -6,10 +6,10 @@
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/MroLite.Api.runtimeconfig.json
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/MroLite.Api.dll
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/MroLite.Api.pdb
+/Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/MroLite.Api.xml
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/Azure.Core.dll
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/Azure.Identity.dll
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/Humanizer.dll
-/Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.dll
@@ -142,6 +142,7 @@
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/obj/Debug/net8.0/MroLite..5666FCE8.Up2Date
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/obj/Debug/net8.0/MroLite.Api.dll
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/obj/Debug/net8.0/refint/MroLite.Api.dll
+/Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/obj/Debug/net8.0/MroLite.Api.xml
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/obj/Debug/net8.0/MroLite.Api.pdb
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/obj/Debug/net8.0/MroLite.Api.genruntimeconfig.cache
 /Users/josedelapena/Documents/Proyecto /MRO-Lite/backend/MroLite.Api/obj/Debug/net8.0/ref/MroLite.Api.dll
