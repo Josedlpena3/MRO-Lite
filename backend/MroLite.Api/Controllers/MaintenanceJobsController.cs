@@ -249,6 +249,7 @@ namespace MroLite.Api.Controllers
             if (missingIds.Count > 0)
                 return BadRequest(new { message = "Some technicians were not found.", missingIds });
 
+            var utcNow = DateTime.UtcNow;
             var job = new MaintenanceJob
             {
                 Equipment = dto.Equipment,
@@ -257,7 +258,9 @@ namespace MroLite.Api.Controllers
                 Status = dto.Status.ToString(),
                 Notes = dto.Notes,
                 Anomaly = dto.Anomaly,
-                Technicians = technicians
+                Technicians = technicians,
+                CreatedAt = utcNow,
+                UpdatedAt = utcNow
             };
 
             _context.MaintenanceJobs.Add(job);

@@ -1,0 +1,51 @@
+<div class="filters card">
+  <div class="filters-header">
+    <div>
+      <h2>Trabajos de mantenimiento</h2>
+      <p>Filtra por estado, empresa y texto libre para acelerar la asignacion.</p>
+    </div>
+    <div class="filters-actions">
+      <button class="btn btn-secondary" type="button" (click)="clearFilters.emit()">Limpiar</button>
+      <button class="btn btn-primary" type="button" (click)="createJob.emit()">Nuevo trabajo</button>
+    </div>
+  </div>
+
+  <div class="filters-grid">
+    <label class="field">
+      <span>Busqueda</span>
+      <input
+        class="input"
+        type="search"
+        placeholder="Equipo, aeronave, tecnico"
+        [(ngModel)]="localFilters.search"
+        (ngModelChange)="emitFilters()"
+      >
+    </label>
+
+    <label class="field">
+      <span>Estado</span>
+      <select
+        class="select"
+        [(ngModel)]="localFilters.status"
+        (ngModelChange)="emitFilters()"
+      >
+        <option value="Todos">Todos</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="EnProceso">En proceso</option>
+        <option value="Completado">Completado</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span>Empresa</span>
+      <select
+        class="select"
+        [(ngModel)]="localFilters.company"
+        (ngModelChange)="emitFilters()"
+      >
+        <option value="Todas">Todas</option>
+        <option *ngFor="let company of companies" [value]="company">{{ company }}</option>
+      </select>
+    </label>
+  </div>
+</div>

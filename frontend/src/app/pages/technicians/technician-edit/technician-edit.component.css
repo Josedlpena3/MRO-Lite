@@ -1,0 +1,43 @@
+.section {
+  margin-top: 24px;
+}
+
+.edit-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.form {
+  max-width: 520px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue-800);
+}
+
+.error {
+  font-size: 11px;
+  color: #c43f3f;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+@media (max-width: 700px) {
+  .edit-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

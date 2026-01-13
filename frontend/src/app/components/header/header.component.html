@@ -1,0 +1,19 @@
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand" routerLink="/jobs">
+      <img src="assets/logo-mark.svg" alt="MRO Lite" class="brand-mark">
+      <div class="brand-text">
+        <div class="brand-title">MRO Lite</div>
+        <div class="brand-subtitle">Maintenance, Repair &amp; Overhaul</div>
+      </div>
+    </div>
+    <nav class="topbar-nav">
+      <a class="nav-item" routerLink="/jobs" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Operacion
+      </a>
+      <a class="nav-item" routerLink="/indicators" routerLinkActive="active">Indicadores</a>
+      <a class="nav-item" routerLink="/technicians" routerLinkActive="active">Trabajadores</a>
+    </nav>
+    <div class="topbar-pill">Confianza operacional</div>
+  </div>
+</header>

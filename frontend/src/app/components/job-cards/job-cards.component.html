@@ -1,0 +1,53 @@
+<div class="cards" *ngIf="jobs.length; else emptyState">
+  <div class="job-card card" *ngFor="let job of jobs; trackBy: trackById">
+    <div class="job-card-header">
+      <div>
+        <div class="job-id">#{{ job.id }}</div>
+        <div class="job-title">{{ job.equipment }}</div>
+      </div>
+      <app-status-badge [status]="job.status"></app-status-badge>
+    </div>
+
+    <div class="job-meta">
+      <div>
+        <span>Aeronave</span>
+        <strong>{{ job.plane }}</strong>
+      </div>
+      <div>
+        <span>Empresa</span>
+        <strong>{{ job.company }}</strong>
+      </div>
+      <div>
+        <span>Tecnicos</span>
+        <strong>{{ getTechnicians(job) }}</strong>
+      </div>
+    </div>
+
+    <div class="job-tags" *ngIf="job.anomaly">
+      <span class="tag-anomalia" [attr.title]="getAnomalyComment(job)">
+        <span class="anomaly-icon" aria-hidden="true">!</span>
+        Anomalia
+      </span>
+      <span class="anomaly-comment">{{ getAnomalyComment(job) }}</span>
+    </div>
+
+    <div class="job-footer">
+      <div class="job-updated">Actualizado {{ job.updatedAt | date: 'dd/MM/yy HH:mm' }}</div>
+      <div class="job-actions">
+        <button class="btn btn-secondary" type="button" (click)="viewJob.emit(job)">
+          Ver detalle
+        </button>
+        <button class="btn btn-danger" type="button" (click)="deleteJob.emit(job)">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #emptyState>
+  <div class="empty card">
+    <div class="empty-title">Sin resultados para los filtros actuales</div>
+    <div class="empty-text">Ajusta los filtros o crea un nuevo trabajo.</div>
+  </div>
+</ng-template>

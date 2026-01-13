@@ -1,0 +1,113 @@
+<div class="form card">
+  <div class="form-header">
+    <div>
+      <h2>{{ isEditMode ? 'Edicion' : 'Nuevo trabajo' }}</h2>
+      <p>Completa la ficha tecnica para registro y seguimiento.</p>
+    </div>
+    <app-status-badge *ngIf="job" [status]="job.status"></app-status-badge>
+  </div>
+
+  <div class="form-info" *ngIf="job">
+    <div>
+      <span>Creado</span>
+      <strong>{{ job.createdAt | date: 'dd/MM/yy HH:mm' }}</strong>
+    </div>
+    <div>
+      <span>Actualizado</span>
+      <strong>{{ job.updatedAt | date: 'dd/MM/yy HH:mm' }}</strong>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <label class="field">
+        <span>Equipo</span>
+        <input class="input" formControlName="equipment" placeholder="Ej. Inspeccion APU">
+        <span class="error" *ngIf="form.controls.equipment.touched && form.controls.equipment.invalid">Requerido</span>
+      </label>
+
+      <label class="field">
+        <span>Empresa</span>
+        <input class="input" formControlName="company" placeholder="Ej. AeroAndes">
+        <span class="error" *ngIf="form.controls.company.touched && form.controls.company.invalid">Requerido</span>
+      </label>
+
+      <label class="field">
+        <span>Aeronave</span>
+        <input class="input" formControlName="plane" placeholder="Ej. A320-214">
+        <span class="error" *ngIf="form.controls.plane.touched && form.controls.plane.invalid">Requerido</span>
+      </label>
+
+      <label class="field">
+        <span>Estado</span>
+        <select class="select" formControlName="status">
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ status === 'EnProceso' ? 'En proceso' : status }}
+          </option>
+        </select>
+      </label>
+
+      <label class="field field-checkbox">
+        <span>Anomalia detectada</span>
+        <input type="checkbox" formControlName="anomaly">
+      </label>
+
+      <label class="field field-full" *ngIf="form.controls.anomaly.value">
+        <span>Comentario sobre la anomalia</span>
+        <textarea
+          class="textarea"
+          formControlName="anomalyComment"
+          placeholder="Detalle la anomalia detectada"
+        ></textarea>
+        <span class="error" *ngIf="anomalyCommentInvalid">Comentario requerido</span>
+      </label>
+
+      <div class="field technicians-block">
+        <div class="technicians-header">
+          <span>Tecnicos</span>
+          <button class="btn btn-secondary btn-small" type="button" (click)="addTechnician()">
+            Agregar tecnico
+          </button>
+        </div>
+
+        <div class="technicians-list" *ngIf="technicianIds.controls.length; else noTechnicians">
+          <div class="technician-row" *ngFor="let control of technicianIds.controls; let i = index">
+            <div class="technician-input">
+              <input
+                class="input"
+                type="number"
+                min="1"
+                placeholder="ID tecnico"
+                [formControl]="control"
+              >
+              <span class="error" *ngIf="control.touched && control.invalid">ID requerido</span>
+              <span class="tech-name" *ngIf="getTechnicianLabel(control.value)">
+                {{ getTechnicianLabel(control.value) }}
+              </span>
+            </div>
+            <button class="btn btn-danger btn-small" type="button" (click)="removeTechnician(i)">
+              Eliminar
+            </button>
+          </div>
+        </div>
+
+        <ng-template #noTechnicians>
+          <div class="empty-tech">Sin tecnicos asignados.</div>
+        </ng-template>
+      </div>
+    </div>
+
+    <label class="field">
+      <span>Notas</span>
+      <textarea class="textarea" formControlName="notes" placeholder="Detalle tecnico, hallazgos, acciones..."></textarea>
+      <span class="error" *ngIf="notesInvalid">Notas requeridas para completar el trabajo.</span>
+    </label>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" type="button" (click)="onCancel()">Cancelar</button>
+      <button class="btn btn-primary" type="submit" [disabled]="form.invalid">
+        {{ isEditMode ? 'Guardar cambios' : 'Crear trabajo' }}
+      </button>
+    </div>
+  </form>
+</div>

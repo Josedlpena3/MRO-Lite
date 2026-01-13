@@ -77,11 +77,13 @@ namespace MroLite.Api.Data
             {
                 if (entry.State == EntityState.Added)
                 {
+                    // Always set timestamps for new entities, even if they were already set
                     entry.Entity.CreatedAt = utcNow;
                     entry.Entity.UpdatedAt = utcNow;
                 }
                 else if (entry.State == EntityState.Modified)
                 {
+                    // Only update UpdatedAt for modified entities, preserve CreatedAt
                     entry.Entity.UpdatedAt = utcNow;
                 }
             }

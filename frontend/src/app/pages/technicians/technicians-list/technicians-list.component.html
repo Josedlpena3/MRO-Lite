@@ -1,0 +1,70 @@
+<section class="container section">
+  <div class="list-header">
+    <div>
+      <h2>Trabajadores</h2>
+      <p>Listado de tecnicos habilitados para trabajos de mantenimiento.</p>
+    </div>
+    <button class="btn btn-primary" type="button" (click)="onCreate()">Nuevo trabajador</button>
+  </div>
+
+  <div class="card table-card">
+    <div class="table-header">
+      <h3 class="card-title">Tecnicos registrados</h3>
+      <span class="table-count">{{ technicians.length }} tecnicos</span>
+    </div>
+
+    <div class="table-wrapper" *ngIf="technicians.length; else emptyState">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let technician of technicians">
+            <td>
+              <div class="cell-main">#{{ technician.id }}</div>
+            </td>
+            <td>
+              <div class="cell-main">{{ technician.name }}</div>
+            </td>
+            <td class="cell-actions">
+              <button class="btn btn-secondary" type="button" (click)="onEdit(technician)">
+                Editar
+              </button>
+              <button class="btn btn-danger" type="button" (click)="onDelete(technician)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty">
+        <div class="empty-title">Sin trabajadores registrados</div>
+        <div class="empty-text">Crea el primer tecnico para comenzar.</div>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="cards" *ngIf="technicians.length">
+    <div class="card tech-card" *ngFor="let technician of technicians">
+      <div>
+        <div class="tech-id">#{{ technician.id }}</div>
+        <div class="tech-name">{{ technician.name }}</div>
+      </div>
+      <div class="tech-actions">
+        <button class="btn btn-secondary" type="button" (click)="onEdit(technician)">
+          Editar
+        </button>
+        <button class="btn btn-danger" type="button" (click)="onDelete(technician)">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

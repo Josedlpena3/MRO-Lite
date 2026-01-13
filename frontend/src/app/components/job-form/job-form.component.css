@@ -1,0 +1,124 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.form-info {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.form-info strong {
+  display: block;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue-800);
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.field-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding-top: 18px;
+}
+
+.field-checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--orange-500);
+}
+
+.technicians-block {
+  grid-column: 1 / -1;
+  gap: 10px;
+}
+
+.technicians-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.technicians-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.technician-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.technician-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tech-name {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.empty-tech {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.error {
+  font-size: 11px;
+  color: #c43f3f;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-info {
+    grid-template-columns: 1fr;
+  }
+}

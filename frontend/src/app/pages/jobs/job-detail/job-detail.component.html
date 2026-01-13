@@ -1,0 +1,81 @@
+<section class="container section" *ngIf="job">
+  <div class="detail-header">
+    <div>
+      <h2>Detalle de trabajo</h2>
+      <p>Vista de lectura para seguimiento operativo y auditoria.</p>
+    </div>
+    <div class="detail-actions">
+      <button class="btn btn-secondary" type="button" (click)="onBack()">← Volver</button>
+      <button class="btn btn-secondary" type="button" (click)="onEdit()">Editar</button>
+      <button class="btn btn-danger" type="button" (click)="onDelete()">Eliminar</button>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="card">
+      <div class="detail-title">Informacion principal</div>
+      <div class="detail-row">
+        <span>Equipo</span>
+        <strong>{{ job.equipment }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Empresa</span>
+        <strong>{{ job.company }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Aeronave</span>
+        <strong>{{ job.plane }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Estado</span>
+        <app-status-badge [status]="job.status"></app-status-badge>
+      </div>
+      <div class="detail-row" *ngIf="job.anomaly">
+        <span>Anomalia</span>
+        <strong
+          class="tag-anomalia"
+          [attr.title]="job.anomalyComment || job.notes || 'Sin comentario'"
+        >
+          <span class="anomaly-icon" aria-hidden="true">!</span>
+          Detectada
+        </strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="detail-title">Tecnicos asignados</div>
+      <div class="detail-list" *ngIf="job.technicianIds.length; else emptyTechs">
+        <div class="detail-chip" *ngFor="let techId of job.technicianIds">
+          {{ getTechnicianLabel(techId) }}
+        </div>
+      </div>
+      <ng-template #emptyTechs>
+        <div class="detail-empty">Sin tecnicos asignados.</div>
+      </ng-template>
+
+      <div class="detail-title">Notas</div>
+      <p class="detail-notes">{{ job.notes || 'Sin notas registradas.' }}</p>
+
+      <div class="detail-title" *ngIf="job.anomaly">Comentario de anomalia</div>
+      <p class="detail-notes" *ngIf="job.anomaly">
+        {{ job.anomalyComment || 'Sin comentario registrado.' }}
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="detail-title">Trazabilidad</div>
+      <div class="detail-row">
+        <span>Creado</span>
+        <strong>{{ job.createdAt | date: 'dd/MM/yy HH:mm' }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>Actualizado</span>
+        <strong>{{ job.updatedAt | date: 'dd/MM/yy HH:mm' }}</strong>
+      </div>
+      <div class="detail-row">
+        <span>ID</span>
+        <strong>#{{ job.id }}</strong>
+      </div>
+    </div>
+  </div>
+</section>

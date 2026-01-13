@@ -1,0 +1,67 @@
+<div class="table-card card">
+  <div class="table-header">
+    <h3 class="card-title">Listado operativo</h3>
+    <span class="table-count">{{ jobs.length }} trabajos</span>
+  </div>
+
+  <div class="table-wrapper" *ngIf="jobs.length; else emptyState">
+    <table>
+      <thead>
+        <tr>
+          <th>Trabajo</th>
+          <th>Aeronave / Empresa</th>
+          <th>Estado</th>
+          <th>Actualizacion</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let job of jobs; trackBy: trackById">
+          <td>
+            <div class="cell-main">#{{ job.id }} · {{ job.equipment }}</div>
+            <div class="cell-sub">
+              Tecnicos: {{ getTechnicians(job) }}
+            </div>
+            <span
+              *ngIf="job.anomaly"
+              class="tag-anomalia"
+              [attr.title]="getAnomalyComment(job)"
+            >
+              <span class="anomaly-icon" aria-hidden="true">!</span>
+              Anomalia
+            </span>
+            <div class="cell-sub anomaly-comment" *ngIf="job.anomaly">
+              {{ getAnomalyComment(job) }}
+            </div>
+          </td>
+          <td>
+            <div class="cell-main">{{ job.plane }}</div>
+            <div class="cell-sub">{{ job.company }}</div>
+          </td>
+          <td>
+            <app-status-badge [status]="job.status"></app-status-badge>
+          </td>
+          <td>
+            <div class="cell-main">{{ job.updatedAt | date: 'dd/MM/yy, HH:mm' }}</div>
+            <div class="cell-sub">Creado {{ job.createdAt | date: 'dd/MM/yy' }}</div>
+          </td>
+          <td class="cell-actions">
+            <button class="btn btn-secondary" type="button" (click)="viewJob.emit(job)">
+              Ver detalle
+            </button>
+            <button class="btn btn-danger" type="button" (click)="deleteJob.emit(job)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty">
+      <div class="empty-title">Sin resultados para los filtros actuales</div>
+      <div class="empty-text">Ajusta los filtros o crea un nuevo trabajo.</div>
+    </div>
+  </ng-template>
+</div>

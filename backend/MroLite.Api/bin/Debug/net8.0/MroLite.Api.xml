@@ -9,32 +9,48 @@
             Endpoints para gestionar trabajos de mantenimiento.
             </summary>
         </member>
-        <member name="M:MroLite.Api.Controllers.MaintenanceJobsController.GetAll">
+        <member name="M:MroLite.Api.Controllers.MaintenanceJobsController.GetAll(System.Int32,System.Int32,System.String,System.String,System.Nullable{MroLite.Api.DTOs.MaintenanceJobStatus},System.String,System.String,System.String,System.Nullable{System.Boolean},System.String)">
             <summary>
-            Lista todos los trabajos de mantenimiento.
+            Lista trabajos de mantenimiento con paginacion, filtros y ordenamiento.
             </summary>
+            <param name="page">Numero de pagina (>= 1).</param>
+            <param name="pageSize">Cantidad por pagina (1-100).</param>
+            <param name="sortBy">Campo: id, equipment, company, plane, status, createdAt, updatedAt.</param>
+            <param name="sortDir">Direccion: asc o desc.</param>
+            <param name="status">Filtra por estado.</param>
+            <param name="company">Filtra por compania (contiene).</param>
+            <param name="plane">Filtra por avion (contiene).</param>
+            <param name="equipment">Filtra por equipo (contiene).</param>
+            <param name="anomaly">Filtra por anomalia.</param>
+            <param name="search">Busca en equipment, company, plane, notes.</param>
             <remarks>
             Ejemplo de respuesta:
             <![CDATA[
-            [
-              {
-                "id": 1,
-                "equipment": "Boeing 737",
-                "company": "Aerolineas Argentinas",
-                "plane": "LV-FUA",
-                "status": "Pendiente",
-                "notes": "Revision general previa a vuelo",
-                "anomaly": false,
-                "createdAt": "2024-01-01T12:00:00Z",
-                "updatedAt": "2024-01-01T12:00:00Z",
-                "technicians": [
-                  { "id": 1, "name": "Juan Perez" }
-                ]
-              }
-            ]
+            {
+              "page": 1,
+              "pageSize": 20,
+              "total": 1,
+              "items": [
+                {
+                  "id": 1,
+                  "equipment": "Boeing 737",
+                  "company": "Aerolineas Argentinas",
+                  "plane": "LV-FUA",
+                  "status": "Pendiente",
+                  "notes": "Revision general previa a vuelo",
+                  "anomaly": false,
+                  "createdAt": "2024-01-01T12:00:00Z",
+                  "updatedAt": "2024-01-01T12:00:00Z",
+                  "technicians": [
+                    { "id": 1, "name": "Juan Perez" }
+                  ]
+                }
+              ]
+            }
             ]]>
             </remarks>
-            <response code="200">Listado de trabajos.</response>
+            <response code="200">Listado paginado de trabajos.</response>
+            <response code="400">Parametros invalidos.</response>
         </member>
         <member name="M:MroLite.Api.Controllers.MaintenanceJobsController.GetById(System.Int32)">
             <summary>
@@ -62,7 +78,7 @@
             <response code="200">Trabajo encontrado.</response>
             <response code="404">Trabajo no encontrado.</response>
         </member>
-        <member name="M:MroLite.Api.Controllers.MaintenanceJobsController.GetByStatus(System.String)">
+        <member name="M:MroLite.Api.Controllers.MaintenanceJobsController.GetByStatus(MroLite.Api.DTOs.MaintenanceJobStatus)">
             <summary>
             Lista trabajos filtrados por estado.
             </summary>
@@ -70,6 +86,7 @@
             Estados validos: Pendiente, EnProceso, Completado.
             </remarks>
             <response code="200">Listado filtrado por estado.</response>
+            <response code="400">Estado invalido.</response>
         </member>
         <member name="M:MroLite.Api.Controllers.MaintenanceJobsController.Create(MroLite.Api.DTOs.CreateJobDto)">
             <summary>

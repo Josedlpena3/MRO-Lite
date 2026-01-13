@@ -1,0 +1,16 @@
+<section class="container section">
+  <div class="edit-header">
+    <div>
+      <h2>{{ isEditMode ? 'Editar trabajo' : 'Crear trabajo' }}</h2>
+      <p>Actualiza la ficha tecnica respetando las reglas del backend.</p>
+    </div>
+    <button class="btn btn-secondary" type="button" (click)="onBack()">← Volver</button>
+  </div>
+
+  <app-job-form
+    [job]="job"
+    [isEditMode]="isEditMode"
+    (saveJob)="onSave($event)"
+    (cancel)="onCancel()"
+  ></app-job-form>
+</section>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MroLite.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b04343f59c1464e5b82d42812afe2597fe61fe8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c739f4d8148ea6324c05f5692aafd3cbd15cf39")]
 [assembly: System.Reflection.AssemblyProductAttribute("MroLite.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MroLite.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

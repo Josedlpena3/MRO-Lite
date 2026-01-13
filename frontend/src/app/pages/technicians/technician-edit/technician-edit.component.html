@@ -1,0 +1,28 @@
+<section class="container section">
+  <div class="edit-header">
+    <div>
+      <h2>{{ isEditMode ? 'Editar trabajador' : 'Nuevo trabajador' }}</h2>
+      <p>Registra tecnicos habilitados para la operacion.</p>
+    </div>
+    <button class="btn btn-secondary" type="button" (click)="onBack()">← Volver</button>
+  </div>
+
+  <div class="card form">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label class="field">
+        <span>Nombre completo</span>
+        <input class="input" formControlName="name" placeholder="Ej. Juan Perez">
+        <span class="error" *ngIf="form.controls.name.touched && form.controls.name.invalid">
+          Requerido. Maximo 100 caracteres.
+        </span>
+      </label>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" type="button" (click)="onCancel()">Cancelar</button>
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid">
+          {{ isEditMode ? 'Guardar cambios' : 'Crear trabajador' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

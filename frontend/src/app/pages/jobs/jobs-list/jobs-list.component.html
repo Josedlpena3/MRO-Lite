@@ -1,0 +1,46 @@
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <h1>Gestion de trabajos de mantenimiento</h1>
+      <p>
+        MRO Lite centraliza la operacion de mantenimiento aeronautico con visibilidad
+        por estado, empresa y aeronave, ofreciendo trazabilidad de extremo a extremo.
+      </p>
+    </div>
+    <div class="hero-panel">
+      <div class="hero-label">Seguridad operacional</div>
+      <div class="hero-value">Control y orden en tiempo real</div>
+      <div class="hero-meta">SLA operativo y cumplimiento regulatorio.</div>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <app-summary-cards [jobs]="jobs"></app-summary-cards>
+</section>
+
+<section class="container content-grid">
+  <div class="list-panel">
+    <app-filters
+      [filters]="filters"
+      [companies]="companies"
+      (filtersChange)="onFilterChange($event)"
+      (clearFilters)="onClearFilters()"
+      (createJob)="onCreateJob()"
+    ></app-filters>
+
+    <app-job-table
+      [jobs]="filteredJobs"
+      [technicianMap]="technicianMap"
+      (viewJob)="onViewJob($event)"
+      (deleteJob)="onDeleteJob($event)"
+    ></app-job-table>
+
+    <app-job-cards
+      [jobs]="filteredJobs"
+      [technicianMap]="technicianMap"
+      (viewJob)="onViewJob($event)"
+      (deleteJob)="onDeleteJob($event)"
+    ></app-job-cards>
+  </div>
+</section>

@@ -1,0 +1,162 @@
+<section class="container section">
+  <div class="indicator-header">
+    <div>
+      <h2>Dashboard operativo</h2>
+      <p>KPIs y distribucion de trabajos segun el periodo seleccionado.</p>
+    </div>
+    <div class="filter-controls">
+      <label class="field field-inline">
+        <span>Periodo</span>
+        <select
+          class="select"
+          [ngModel]="timeFilter"
+          (ngModelChange)="onTimeFilterChange($event)"
+        >
+          <option *ngFor="let option of timeOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div class="indicator-grid">
+    <div class="indicator-card card" *ngFor="let card of cards" [ngClass]="card.tone">
+      <div class="indicator-label">{{ card.label }}</div>
+      <div class="indicator-value">{{ card.value }}</div>
+      <div class="indicator-helper">{{ card.helper }}</div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!hasData">
+    No hay trabajos en el periodo seleccionado.
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-header">
+    <div>
+      <h2>Distribucion de estados y anomalias</h2>
+      <p>Visualiza la composicion del trabajo en el periodo seleccionado.</p>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="card chart-card">
+      <h3 class="card-title">Por estado</h3>
+      <div class="chart-wrapper">
+        <canvas #statusChart></canvas>
+      </div>
+    </div>
+
+    <div class="card chart-card">
+      <h3 class="card-title">Anomalias</h3>
+      <div class="chart-wrapper">
+        <canvas #anomalyChart></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-header">
+    <div>
+      <h2>Indicadores por tecnico</h2>
+      <p>Analiza el rendimiento del tecnico en el periodo seleccionado.</p>
+    </div>
+  </div>
+
+  <div class="split-grid">
+    <div class="card">
+      <label class="field">
+        <span>Buscar tecnico</span>
+        <input
+          class="input"
+          type="text"
+          placeholder="Nombre del tecnico"
+          [(ngModel)]="technicianQuery"
+          (ngModelChange)="onTechnicianQueryChange($event)"
+        >
+      </label>
+
+      <div class="match-list" *ngIf="technicianMatches.length > 1">
+        <span>Coincidencias:</span>
+        <button
+          class="btn btn-secondary btn-small"
+          type="button"
+          *ngFor="let tech of technicianMatches"
+          (click)="selectTechnician(tech)"
+        >
+          {{ tech.name }} (ID: {{ tech.id }})
+        </button>
+      </div>
+
+      <div class="tech-summary" *ngIf="selectedTechnician; else noSelection">
+        <div class="tech-name">{{ selectedTechnician.name }}</div>
+        <div class="tech-id">ID: {{ selectedTechnician.id }}</div>
+
+        <div class="tech-metrics">
+          <div class="metric completed">
+            <span>{{ technicianStats.completed }}%</span>
+            <small>Completados</small>
+          </div>
+          <div class="metric progress">
+            <span>{{ technicianStats.inProgress }}%</span>
+            <small>En proceso</small>
+          </div>
+          <div class="metric anomalies">
+            <span>{{ technicianStats.anomalies }}%</span>
+            <small>Anomalias</small>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noSelection>
+        <div class="empty-state">
+          Especifica un tecnico para ver sus indicadores.
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="card chart-card">
+      <div class="chart-wrapper">
+        <canvas #technicianChart></canvas>
+      </div>
+      <div class="empty-state" *ngIf="!hasData">
+        No hay datos para graficar en el periodo.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-header">
+    <div>
+      <h2>Indicadores por empresa</h2>
+      <p>Distribucion porcentual del trabajo por empresa en el periodo elegido.</p>
+    </div>
+  </div>
+
+  <div class="split-grid">
+    <div class="card chart-card">
+      <div class="chart-wrapper">
+        <canvas #companyChart></canvas>
+      </div>
+      <div class="empty-state" *ngIf="!companyStats.length">
+        Sin datos de empresas para el periodo seleccionado.
+      </div>
+    </div>
+    <div class="card">
+      <div class="company-list" *ngIf="companyStats.length; else emptyCompanies">
+        <div class="company-row" *ngFor="let company of companyStats; let i = index">
+          <div class="company-color" [style.background]="getCompanyColor(i)"></div>
+          <div class="company-name">{{ company.name }}</div>
+          <div class="company-percent">{{ company.percent }}%</div>
+        </div>
+      </div>
+      <ng-template #emptyCompanies>
+        <div class="empty-state">Sin datos de empresas para el periodo seleccionado.</div>
+      </ng-template>
+    </div>
+  </div>
+</section>
