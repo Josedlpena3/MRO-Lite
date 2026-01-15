@@ -4,6 +4,7 @@ namespace MroLite.Api.Data
 {
     public static class SeedData
     {
+        // Manual seed helper; not invoked automatically at startup.
         public static void Initialize(ApplicationDbContext context)
         {
             if (context.Technicians.Any() || context.MaintenanceJobs.Any())

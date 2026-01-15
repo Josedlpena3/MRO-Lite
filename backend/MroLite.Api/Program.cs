@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MroLite.Api.Data;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -15,7 +16,29 @@ builder.Services
     .AddJsonOptions(options =>
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
+// CORS: Primero intenta leer desde configuración (appsettings.json)
+// Luego intenta desde variables de entorno (para Railway/Render)
 var allowedOrigins = builder.Configuration.GetSection("Cors:Origins").Get<string[]>();
+if (allowedOrigins == null || allowedOrigins.Length == 0)
+{
+    // Intentar leer desde variables de entorno (formato: Cors__Origins__0, Cors__Origins__1, etc.)
+    var envOrigins = new List<string>();
+    var index = 0;
+    while (true)
+    {
+        var origin = builder.Configuration[$"Cors:Origins:{index}"] ?? 
+                     builder.Configuration[$"Cors__Origins__{index}"];
+        if (string.IsNullOrEmpty(origin))
+            break;
+        envOrigins.Add(origin);
+        index++;
+    }
+    if (envOrigins.Count > 0)
+    {
+        allowedOrigins = envOrigins.ToArray();
+    }
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -25,6 +48,16 @@ builder.Services.AddCors(options =>
             policy.WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
                 .AllowAnyMethod();
+        }
+        else
+        {
+            // En desarrollo, permitir todos los origins si no hay configuración
+            if (builder.Environment.IsDevelopment())
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            }
         }
     });
 });
@@ -49,16 +82,12 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        context.Database.Migrate();
-        SeedData.Initialize(context);
-    }
-
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.Logger.LogInformation("ENV: {Environment}", app.Environment.EnvironmentName);
+app.Logger.LogInformation("Startup OK");
 
 app.UseHttpsRedirection();
 

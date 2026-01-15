@@ -1,8 +1,8 @@
 {
-  "name": "mro-lite",
+  "name": "mro-lite-seed",
   "version": "1.0.0",
   "description": "MRO Lite is a simplified Maintenance, Repair and Overhaul (MRO) system designed to manage maintenance jobs for aircraft and equipment.",
-  "main": "seed.js",
+  "main": "seed.local.js",
   "directories": {
     "doc": "docs"
   },

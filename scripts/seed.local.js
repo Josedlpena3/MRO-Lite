@@ -1,7 +1,7 @@
 /*
-  MRO Lite seed script
+  MRO Lite local seed script (manual only, not used in deploy)
   Requires: npm install mssql
-  Run: node seed.js
+  Run: node seed.local.js
 */
 
 const sql = require('mssql');

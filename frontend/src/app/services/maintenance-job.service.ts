@@ -3,7 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { JobDraft, MaintenanceJob, MaintenanceJobStatus } from '../models/maintenance-job.model';
 import { Technician } from '../models/technician.model';
+import { environment } from '../../environments/environment';
 
+/**
+ * Interfaz para normalizar respuestas de técnicos de la API
+ */
 interface TechnicianApi {
   id?: number;
   Id?: number;
@@ -11,6 +15,9 @@ interface TechnicianApi {
   Name?: string;
 }
 
+/**
+ * Interfaz para normalizar respuestas de trabajos de la API
+ */
 interface MaintenanceJobApi {
   id?: number;
   Id?: number;
@@ -34,6 +41,9 @@ interface MaintenanceJobApi {
   Technicians?: TechnicianApi[];
 }
 
+/**
+ * Interfaz para respuestas paginadas de la API
+ */
 interface PagedResult<T> {
   page?: number;
   Page?: number;
@@ -45,6 +55,10 @@ interface PagedResult<T> {
   Items?: T[];
 }
 
+/**
+ * Servicio para gestionar trabajos de mantenimiento.
+ * Proporciona operaciones CRUD y mantiene el estado mediante BehaviorSubject.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -52,13 +66,18 @@ export class MaintenanceJobService {
   private readonly jobsSubject = new BehaviorSubject<MaintenanceJob[]>([]);
   readonly jobs$ = this.jobsSubject.asObservable();
 
-  private readonly apiUrl = '/api';
+  private readonly apiUrl = environment.apiUrl;
   private readonly pageSize = 100;
   private loaded = false;
   private loadingPromise: Promise<void> | null = null;
 
   constructor(private readonly http: HttpClient) {}
 
+  /**
+   * Carga todos los trabajos desde la API.
+   * Implementa paginación automática para obtener todos los registros.
+   * @param force - Si es true, fuerza la recarga incluso si ya están cargados
+   */
   async loadJobs(force = false): Promise<void> {
     if (this.loaded && !force) {
       return;
@@ -87,14 +106,23 @@ export class MaintenanceJobService {
     }
   }
 
+  /**
+   * Obtiene el estado actual de los trabajos de forma síncrona.
+   */
   getSnapshot(): MaintenanceJob[] {
     return this.jobsSubject.value;
   }
 
+  /**
+   * Busca un trabajo por su ID.
+   */
   getById(id: number): MaintenanceJob | undefined {
     return this.jobsSubject.value.find((job) => job.id === id);
   }
 
+  /**
+   * Crea un nuevo trabajo de mantenimiento.
+   */
   async createJob(draft: JobDraft): Promise<MaintenanceJob> {
     const payload = {
       equipment: draft.equipment,
@@ -118,6 +146,9 @@ export class MaintenanceJobService {
     return mapped;
   }
 
+  /**
+   * Actualiza un trabajo existente.
+   */
   async updateJob(id: number, draft: JobDraft): Promise<MaintenanceJob | null> {
     const payload = {
       equipment: draft.equipment,
@@ -133,6 +164,9 @@ export class MaintenanceJobService {
     return this.refreshJob(id, draft.anomalyComment ?? undefined);
   }
 
+  /**
+   * Actualiza solo el estado de un trabajo.
+   */
   async updateStatus(id: number, status: MaintenanceJobStatus): Promise<MaintenanceJob | null> {
     await firstValueFrom(
       this.http.patch<void>(`${this.apiUrl}/maintenancejobs/${id}/status`, { status })
@@ -140,6 +174,9 @@ export class MaintenanceJobService {
     return this.refreshJob(id);
   }
 
+  /**
+   * Elimina un trabajo.
+   */
   async deleteJob(id: number): Promise<boolean> {
     await firstValueFrom(this.http.delete<void>(`${this.apiUrl}/maintenancejobs/${id}`));
     const jobs = this.jobsSubject.value;
@@ -147,6 +184,9 @@ export class MaintenanceJobService {
     return true;
   }
 
+  /**
+   * Mapea un DTO de la API a un objeto MaintenanceJob interno.
+   */
   private mapJob(dto: MaintenanceJobApi): MaintenanceJob {
     const technicians = (dto.technicians ?? dto.Technicians ?? []).map((tech) =>
       this.normalizeTechnician(tech)
@@ -169,6 +209,9 @@ export class MaintenanceJobService {
     };
   }
 
+  /**
+   * Obtiene todos los trabajos paginando automáticamente hasta obtener todos los registros.
+   */
   private async fetchAllJobs(): Promise<MaintenanceJob[]> {
     const jobs: MaintenanceJob[] = [];
     let page = 1;
@@ -200,6 +243,10 @@ export class MaintenanceJobService {
     return jobs;
   }
 
+  /**
+   * Refresca un trabajo desde la API después de una actualización.
+   * Preserva el comentario de anomalía si existe.
+   */
   private async refreshJob(id: number, anomalyCommentOverride?: string): Promise<MaintenanceJob | null> {
     try {
       const refreshed = await firstValueFrom(
@@ -223,6 +270,10 @@ export class MaintenanceJobService {
     }
   }
 
+  /**
+   * Normaliza una respuesta paginada de la API.
+   * Maneja variaciones en el formato (camelCase/PascalCase).
+   */
   private normalizePagedResult(raw?: PagedResult<MaintenanceJobApi> | null): {
     total: number;
     items: MaintenanceJobApi[];
@@ -235,6 +286,9 @@ export class MaintenanceJobService {
     };
   }
 
+  /**
+   * Normaliza los datos de un técnico del API.
+   */
   private normalizeTechnician(raw: TechnicianApi): Technician {
     const id = Number(raw.id ?? raw.Id ?? 0);
     const name = (raw.name ?? raw.Name ?? '').toString();
