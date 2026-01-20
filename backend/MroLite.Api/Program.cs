@@ -5,6 +5,12 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrWhiteSpace(port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
+
 // =======================
 // Services
 // =======================
@@ -30,8 +36,15 @@ builder.Services.AddCors(options =>
 });
 
 // DbContext (EF Core + SQL Server)
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__Default")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Missing connection string. Set ConnectionStrings__Default for the database.");
+}
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -42,20 +55,34 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+var runSeed = builder.Configuration.GetValue("RUN_SEED", false);
+var enableSwagger = app.Environment.IsDevelopment()
+    || builder.Configuration.GetValue("ENABLE_SWAGGER", false);
 
 // =======================
 // Middleware
 // =======================
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || runSeed)
 {
     using (var scope = app.Services.CreateScope())
     {
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        context.Database.Migrate();
-        SeedData.Initialize(context);
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        try
+        {
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            context.Database.Migrate();
+            SeedData.Initialize(context);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Database migration/seed failed. Continuing startup.");
+        }
     }
+}
 
+if (enableSwagger)
+{
     app.UseSwagger();
     app.UseSwaggerUI();
 }
