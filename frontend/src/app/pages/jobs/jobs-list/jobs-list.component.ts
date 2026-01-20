@@ -5,10 +5,6 @@ import { JobFilter, MaintenanceJob } from '../../../models/maintenance-job.model
 import { MaintenanceJobService } from '../../../services/maintenance-job.service';
 import { TechnicianService } from '../../../services/technician.service';
 
-/**
- * Componente para listar y gestionar trabajos de mantenimiento.
- * Incluye funcionalidad de filtrado por estado, empresa y búsqueda de texto.
- */
 @Component({
   selector: 'app-jobs-list',
   templateUrl: './jobs-list.component.html',
@@ -34,7 +30,6 @@ export class JobsListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Cargar datos iniciales
     void this.jobService.loadJobs().catch((error) => {
       console.error('Error al cargar trabajos', error);
     });
@@ -43,7 +38,6 @@ export class JobsListComponent implements OnInit, OnDestroy {
       console.error('Error al cargar tecnicos', error);
     });
 
-    // Suscribirse a cambios en los trabajos
     this.subscription.add(
       this.jobService.jobs$.subscribe((jobs) => {
         this.jobs = jobs;
@@ -52,7 +46,6 @@ export class JobsListComponent implements OnInit, OnDestroy {
       })
     );
 
-    // Suscribirse a cambios en los técnicos para construir el mapa de nombres
     this.subscription.add(
       this.technicianService.technicians$.subscribe((technicians) => {
         this.technicianMap = technicians.reduce<Record<number, string>>((acc, tech) => {
@@ -68,17 +61,11 @@ export class JobsListComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  /**
-   * Actualiza los filtros cuando el usuario los modifica.
-   */
   onFilterChange(filters: JobFilter): void {
     this.filters = filters;
     this.applyFilters();
   }
 
-  /**
-   * Restablece todos los filtros a sus valores por defecto.
-   */
   onClearFilters(): void {
     this.filters = {
       status: 'Todos',
@@ -88,23 +75,14 @@ export class JobsListComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
-  /**
-   * Navega a la vista de detalle de un trabajo.
-   */
   onViewJob(job: MaintenanceJob): void {
     this.router.navigate(['/jobs', job.id]);
   }
 
-  /**
-   * Navega al formulario de creación de trabajo.
-   */
   onCreateJob(): void {
     this.router.navigate(['/jobs/new']);
   }
 
-  /**
-   * Elimina un trabajo después de confirmación.
-   */
   onDeleteJob(job: MaintenanceJob): void {
     const confirmed = window.confirm('Seguro que queres eliminar este trabajo?');
     if (!confirmed) {
@@ -116,40 +94,26 @@ export class JobsListComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Actualiza la lista de empresas únicas disponibles para el filtro.
-   */
   private updateCompanies(): void {
     const unique = new Set(this.jobs.map((job) => job.company));
     this.companies = Array.from(unique).sort();
 
-    // Si la empresa del filtro ya no existe, resetear a "Todas"
     if (this.filters.company !== 'Todas' && !unique.has(this.filters.company)) {
       this.filters = { ...this.filters, company: 'Todas' };
     }
   }
 
-  /**
-   * Aplica los filtros actuales a la lista de trabajos.
-   * Filtra por estado, empresa y texto de búsqueda.
-   */
   private applyFilters(): void {
     const search = this.filters.search.trim().toLowerCase();
 
     this.filteredJobs = this.jobs.filter((job) => {
-      // Filtro por estado
       const matchesStatus = this.filters.status === 'Todos' || job.status === this.filters.status;
-      
-      // Filtro por empresa
       const matchesCompany = this.filters.company === 'Todas' || job.company === this.filters.company;
-      
-      // Construir nombres de técnicos para búsqueda
       const technicianNames = job.technicianIds
         .map((id) => this.technicianMap[id])
         .filter(Boolean)
         .join(' ');
 
-      // Filtro de búsqueda de texto (busca en múltiples campos)
       const matchesSearch =
         !search ||
         [

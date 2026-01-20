@@ -5,6 +5,7 @@
   "scripts": {
     "start": "ng serve --proxy-config proxy.conf.json --port 4200",
     "build": "ng build",
+    "build:vercel": "node scripts/write-env.js && ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint"
   },
