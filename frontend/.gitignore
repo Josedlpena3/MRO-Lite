@@ -1,9 +1,3 @@
 # Angular
 dist/
 .angular/
-
-# Environments locales
-src/environments/
-
-# Scripts locales
-scripts/

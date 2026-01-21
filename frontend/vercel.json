@@ -1,7 +1,0 @@
-{
-  "buildCommand": "npm run build:vercel",
-  "outputDirectory": "dist/mro-lite",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
-}
